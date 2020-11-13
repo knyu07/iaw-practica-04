@@ -28,8 +28,8 @@ mv adminer-4.7.7-mysql.php index.php
 
 # INSTALACIÓN DE PHPMYADMIN
 #VARIABLES
-IP_PRIVADA_MYSQL=54.236.33.182
-
+IP_MYSQL=3.81.215.94
+IP_MYSQL_PHP=3.81.215.94
 #Instalamos la utilidad unzip
 apt install unzip -y
 
@@ -50,8 +50,8 @@ mv phpMyAdmin-5.0.4-all-languages/ /var/www/html/phpmyadmin
 #Configuramos el archivo config.inc.php de phpMyAdmin
 cd /var/www/html/phpmyadmin
 mv config.sample.inc.php config.inc.php
-sed -i "s/localhost/$IP_PRIVADA_MYSQL/" /var/www/html/phpmyadmin/config.inc.php
-sed -i "s/localhost/$IP_PRIVADA_MYSQL/" /var/www/html/config.php
+sed -i "s/localhost/$IP_MYSQL/" /var/www/html/phpmyadmin/config.inc.php
+sed -i "s/localhost/$IP_MYSQL_PHP/" /var/www/html/config.php
 
 # INSTALACIÓN GOACCESS
 
@@ -71,7 +71,10 @@ nohup goaccess /var/log/apache2/access.log -o /var/www/html/stats/index.html --l
 htpasswd -bc $HTTPPASSWD_DIR/.htpasswd $HTTPPASSWD_USER $HTTPASSWD_PASSWD
 
 # Copiamos el archivo de configuración de Apache
-cp /home/ubuntu/000-default.conf /etc/apache2/sites-available/
+cd /etc/apache2/sites-available/
+rm -rf 000-default.conf
+cd /home/ubuntu
+cp /home/ubuntu/iaw-practica-03/000-default.conf /etc/apache2/sites-available/
 systemctl restart apache2
 
 # --------------------------------------------------------------------------------
