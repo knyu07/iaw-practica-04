@@ -6,9 +6,7 @@ En esta práctica cogeremos los conceptos de la practica-03, con la diferencia d
 
 ![](Imágenes/red.png);
 
-> - Una capa de front-end, que será pública
-> - Otra capa de front-end, que será pública
-
+> - Una capa de front-end, con dos servidores, que será pública
 > - Una capa de back-end, que será privada
 
 #############################################################
