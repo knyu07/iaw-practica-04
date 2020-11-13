@@ -1,0 +1,105 @@
+
+#!/bin/bash
+set -x
+# Actualizamos la lista de paquetes
+apt update
+
+#Actualizamos los paquete
+apt upgrade -y
+
+# APACHE
+apt install apache2 -y
+
+# Instalamos los módulos de PHP
+apt install php libapache2-mod-php php-mysql -y
+
+#-------------- Herramientas Administrativas -----------------------#
+
+# INSTALACIÓN ADMINER
+# Creamos carpeta
+sudo mkdir /var/www/html/Adminer
+# Nos movemos a esta ruta
+cd /var/www/html/Adminer
+
+# Instalamos herramientas adicionales
+wget https://github.com/vrana/adminer/releases/download/v4.7.7/adminer-4.7.7-mysql.php
+
+# Renombrar el archivo Adminer
+mv adminer-4.7.7-mysql.php index.php
+
+# INSTALACIÓN DE PHPMYADMIN
+#VARIABLES
+IP_PRIVADA_MYSQL=54.236.33.182
+IP_PRIVADA_MYSQL_2=54.236.33.182
+
+#Instalamos la utilidad unzip
+apt install unzip -y
+
+#Descargamos el código fuente de phpMyAdmin
+cd /home/Ubuntu
+rm -rf phpMyAdmin-5.0.4-all-languages.zip
+wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.zip
+
+#Descomprimimos el archivo .zip
+unzip phpMyAdmin-5.0.4-all-languages.zip
+
+#Borramos el archivo .zip
+rm -rf phpMyAdmin-5.0.4-all-languages.zip
+
+#Movemos el directorio de phpMyAdmin al directorio /var/www/html
+mv phpMyAdmin-5.0.4-all-languages/ /var/www/html/phpmyadmin
+
+#Configuramos el archivo config.inc.php de phpMyAdmin
+cd /var/www/html/phpmyadmin
+mv config.sample.inc.php config.inc.php
+sed -i "s/localhost/$IP_PRIVADA_MYSQL/" /var/www/html/phpmyadmin/config.inc.php
+sed -i "s/localhost/$IP_PRIVADA_MYSQL_2/" /var/www/html/config.php
+
+
+# INSTALACIÓN GOACCESS
+
+echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list.d/goaccess.list
+wget -O - https://deb.goaccess.io/gnugpg.key | sudo apt-key add -
+apt-get update -y
+apt-get install goaccess -y
+
+#Creación de un direcctorio para consultar estadísticas
+# DEFINIMOS VARIABLES
+HTTPPASSWD_USER=pilar
+HTTPASSWD_PASSWD=root
+HTTPPASSWD_DIR=/home/ubuntu
+
+mkdir -p /var/www/html/stats
+nohup goaccess /var/log/apache2/access.log -o /var/www/html/stats/index.html --log-format=COMBINED --real-time-html &
+htpasswd -bc $HTTPPASSWD_DIR/.htpasswd $HTTPPASSWD_USER $HTTPASSWD_PASSWD
+
+# Copiamos el archivo de configuración de Apache
+cp /home/ubuntu/000-default.conf /etc/apache2/sites-available/
+systemctl restart apache2
+
+# --------------------------------------------------------------------------------
+# Instalamos la aplicación web
+# --------------------------------------------------------------------------------
+
+# Clonamos el repositorio
+cd /var/www/html
+rm -rf iaw-practica-lamp
+git clone https://github.com/josejuansanchez/iaw-practica-lamp
+mv /var/www/html/iaw-practica-lamp/src/* /var/www/html/
+
+# Eliminamos contenido que no sea útil
+rm -rf /var/www/html/index.htmlrm -rf /var/www/html/iaw-practica-lamp
+
+#Cambiamos los permisos
+chown www-data:www-data * -R
+
+#Para acceder al index a través de la IP:
+cd /var/www/html
+mv index.html pipo
+mv add.html index.html
+
+#Reiniciamos
+systemctl restart apache2
+
+
+
