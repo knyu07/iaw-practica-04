@@ -49,7 +49,7 @@ En ella crearemos nuestro back-end.sh y haremos nuestro script específico para 
 
 - Instalación de MySQL Server 
 
-Para que ambas máquinas front-end se conecten al servidor MySQL configuramos el archivo /etc/mysql/mysql.conf.d/mysqld.cnf
+:exclamation: Para que ambas máquinas front-end se conecten al servidor MySQL configuramos el archivo /etc/mysql/mysql.conf.d/mysqld.cnf
 sustituyendo localhost por 0.0.0.0
 
 Creados nuestras máquinas y script para fornt-end y back-end ejecutamos. 
