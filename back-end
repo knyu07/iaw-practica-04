@@ -3,7 +3,7 @@ set -x
 
 #VARIABLES
 BD_ROOT_PASSWD=root
-IP_PUBLICA_FRONT=18.232.83.127
+IP_PUBLICA_FRONT=100.25.28.39
 
 # Actualizamos la lista de paquetes
 apt update
