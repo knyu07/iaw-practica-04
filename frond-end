@@ -25,8 +25,8 @@ mv adminer-4.7.7-mysql.php index.php
 
 # INSTALACIÓN DE PHPMYADMIN
 #VARIABLES
-IP_MYSQL=3.81.215.94
-IP_MYSQL_PHP=3.81.215.94
+IP_MYSQL=52.91.120.118
+IP_MYSQL_PHP=52.91.120.118
 #Instalamos la utilidad unzip
 apt install unzip -y
 
